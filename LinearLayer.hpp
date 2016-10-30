@@ -2,66 +2,89 @@
 #include <cmath>
 #include <random>
 
-#include "types.h"
+#include "lznn_types.h"
+#include "lznn_math.hpp"
 
 class LinearLayer
 {
     public:
+
+        Matrix W;
+        Vector W0;
+
         LinearLayer(size_t dataSize, size_t inputSize, size_t outputSize)
-        :inputSize(inputSize),outputSize(outputSize)
+        :LinearLayer(Matrix(dataSize, Vector(inputSize, 0.0)), dataSize, inputSize, outputSize)
         {
-            this->input  = vector<double>(inputSize, 0);
-            this->output = vector<double>(outputSize, 0);
         }
-        LinearLayer(vector<double> &input, size_t dataSize, size_t inputSize, size_t outputSize)
-        :input(input), W0(vector<double>(outputSize, 1.0)), output(vector<double>(outputSize, 0.0))
+        LinearLayer(Matrix input, size_t dataSize, size_t inputSize, size_t outputSize)
+        :
+            input(input),
+            output(Matrix(dataSize, Vector(outputSize, 0.0))), 
+            W0(Vector(outputSize, 0.0)),
+            W(Matrix(outputSize, Vector(inputSize, 0.0)))
         {
             this->dataSize   = dataSize;
             this->inputSize  = inputSize;
             this->outputSize = outputSize;
-
-            std::default_random_engine generator;
-            std::uniform_real_distribution<double> distribution(-1.0, 1.0);
-
-            for(size_t i = 0; i < inputSize * outputSize; i++)
-            {
-                W[i] = distribution(generator);
-            } 
+            initW();
         }
+
         void ForwPropagate()
         {
             double sum;
-            for(int i = 0; i < outputSize; i++)
+            for (int k = 0; k < dataSize; k++)
             {
-                sum = 0.0;
-                for(int j = 0; j < inputSize; j++)
+                for(int i = 0; i < outputSize; i++)
                 {
-                    sum += W[i * inputSize + j] * input[j];
+                    sum = 0.0;
+                    for(int j = 0; j < inputSize; j++)
+                    {
+                        sum += W[i][j] * input[k][j];
+                    }
+                    output[k][i] = avtivition(sum + W0[i]);
                 }
-                output[i] = avtivition(sum + W0[i]);
             }
         }
+
         void BackPropagate()
         {
             //TODO: back propagate
         }
-        vector<double> *GetOutput()
+
+        Matrix *Output()
         {
             return &(this->output);
         }
 
-        vector<double> W;
-        vector<double> W0;
+        void SetInput(Matrix &intput)
+        {
+            this->input = intput;
+        }
+    private:
+
+        Matrix input;
+        Matrix output;
+        Matrix delta;
         size_t dataSize;
         size_t inputSize;
         size_t outputSize;
-        vector<double> input;
-    private:
-        vector<double> output;
+
         double avtivition(double in)
         {
             double result = 1.0 / (1.0 + exp(-in));
             return result;
         }
-        vector<double> delta;
+        void initW()
+        {
+            std::default_random_engine generator;
+            std::uniform_real_distribution<double> distribution(-1.0, 1.0);
+            for (size_t i = 0; i < this->outputSize; i++)
+            {
+                for (size_t j = 0; j < this->inputSize; j++)
+                {
+                    W[i][j] = distribution(generator);
+                }
+                W0[i] = distribution(generator);
+            }
+        }
 };

@@ -6,6 +6,7 @@
 using namespace std;
 
 #include "LinearLayer.hpp"
+#include "lznn_types.h"
 
 vector<string> *split(string line, char delim)
 {
@@ -25,7 +26,7 @@ double stringToDouble(string str)
     tran >> a;
     return a;
 }
-void fillData(string dataFile, vector<double> &data)
+void fillData(string dataFile, Matrix &data)
 {
     int a = 0;
     ifstream dataF;
@@ -33,12 +34,14 @@ void fillData(string dataFile, vector<double> &data)
     string oneLine;
     while(getline(dataF, oneLine))
     {
+        Vector tmp;
         vector<string> *number = NULL;
         number = split(oneLine,' ');
         for(int i = 0; i < number->size(); i++)
         {
-            data.push_back(stringToDouble((*number)[i]));
+            tmp.push_back(stringToDouble((*number)[i]));
         }
+        data.push_back(tmp);
         delete number;
     }
     dataF.close();
@@ -59,70 +62,59 @@ void fillData(string labelFile, vector<int> &labels)
 
 int main(void)
 {
-    vector<double> inputs; 
-    vector<double> W1;
-    vector<double> W2;
-    vector<int> labels;
+    Matrix inputs; 
+    Matrix W1;
+    Matrix W2;
+    VectorInt labels;
     
     fillData("./data/X.txt", inputs);
     fillData("./data/Theta1.txt", W1);
     fillData("./data/Theta2.txt", W2);
     fillData("./data/label.txt", labels);
 
-    LinearLayer layer1(400, 25);
+    size_t dataSize = 5000;
 
-    for(int i = 0; i < 25; i++)
+    LinearLayer layer1(inputs, dataSize, 400, 25);
+    for(size_t i = 0; i < 25; i++)
     {
-        layer1.W0.push_back(W1[i * 401]);
-        for(int j = 1; j <= 400; j++)
+        layer1.W0[i] = W1[i][0];
+
+        for(size_t j = 1; j <= 400; j++)
         {
-            layer1.W.push_back(W1[i * 401 + j]);
+            layer1.W[i][j - 1] = W1[i][j];
         }
     }
+    layer1.ForwPropagate();
 
-    LinearLayer layer2(25, 10);
-
-
-    for(int i = 0; i < 10; i++)
+    LinearLayer layer2(*(layer1.Output()), dataSize, 25, 10);
+    for(size_t i = 0; i < 10; i++)
     {
-        layer2.W0.push_back(W2[i * 26]);
-        for(int j = 1; j <= 25; j++)
+        layer2.W0[i] = W2[i][0];
+        for(size_t j = 1; j <= 25; j++)
         {
-            layer2.W.push_back(W2[i * 26 + j]);
+            layer2.W[i][j - 1] = W2[i][j];
         }
     }
+    layer2.ForwPropagate();
 
     int currectCounter = 0;
-    for(int i = 0; i < 5000; i++)
+    Matrix *output = layer2.Output();
+    for(size_t i = 0; i < dataSize; i++)
     {
-        for(int j = 0; j < 400; j ++ )
+        size_t predict = 0;
+        for (size_t j = 0; j < 10; j++)
         {
-            layer1.input[j] = inputs[i * 400 + j];
-        }
-        layer1.Forward();
-
-        vector<double> *layer1Output = layer1.GetOutput();
-        for(int j = 0; j < layer1Output->size(); j++)
-        {
-            layer2.input[j] = (*layer1Output)[j];
-            //cout << layer1.output[j] << " ";
-        }
-        layer2.Forward();
-        vector<double> *layer2Output = layer2.GetOutput();
-        int predict = 0;
-        for(int j = 0; j < 10; j++)
-        {
-            if ((*layer2Output)[j] > (*layer2Output)[predict])
+            if ((*output)[i][j] > (*output)[i][predict])
             {
                 predict = j;
             }
         }
-        //cout << predict + 1 << " " << labels[i] << endl;
         if (predict + 1 == labels[i])
         {
             currectCounter += 1;
         }
-    } 
+    }
     cout << double(currectCounter / 5000.0) << endl;
+    
     return 0;
 }
