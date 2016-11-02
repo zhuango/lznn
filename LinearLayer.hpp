@@ -20,8 +20,8 @@ class LinearLayer
         :
             input(input),
             output(Matrix(dataSize, Vector(outputSize, 0.0))),
-            outputNotActiveted(Matrix(dataSize, Vector(outputSize, 0.0))),
             WeightDelta(Vector(outputSize, 0.0)),
+            deltas(Vector(outputSize), 0.0),
             W0(Vector(outputSize, 0.0)),
             W(Matrix(outputSize, Vector(inputSize, 0.0)))
         {
@@ -43,7 +43,6 @@ class LinearLayer
                     {
                         sum += W[i][j] * input[k][j];
                     }
-                    outputNotActiveted[k][i] = sum + W0[i];
                     output[k][i] = sigmoid(sum + W0[i]);
                 }
             }
@@ -52,7 +51,7 @@ class LinearLayer
         void BackPropagate(double learningRate)
         {
             //TODO: back propagate
-            
+            calculateGredientW();
             for (int i = 0; i < outputSize; i++)
             {
                 for (int j = 0; j < inputSize; j++)
@@ -64,6 +63,7 @@ class LinearLayer
             {
                 W0[i] += learningRate * gredientW0[i];
             }
+            calWeightedDeltas();
         }
 
         Matrix *Output()
@@ -79,9 +79,9 @@ class LinearLayer
 
         Matrix input;
         Matrix output;
-        Matrix outputNotActiveted;
         Matrix gredientW;
         Vector gredientW0;
+        Vector deltas;
         size_t dataSize;
         size_t inputSize;
         size_t outputSize;
@@ -111,13 +111,11 @@ class LinearLayer
         }
         void calculateGredientW()
         {
-            Vector deltas(outputSize + 1, 0.0);
             for(size_t i = 0; i < dataSize; i++)
             {
                 for(size_t j = 0; j < outputSize; j++)
                 {
-                    double delta = sigmoidGredient(outputNotActiveted[i][j]) * (*NextLinearWeightDelta)[j];
-                    deltas[j] = delta;
+                    deltas[j] = output[i][j] * (1 - putput[i][j]) * (*NextLinearWeightDelta)[j];
                 }
                 for(size_t j = 0; j < outputSize; j++)
                 {
@@ -128,6 +126,10 @@ class LinearLayer
                     this->gredientW0[j] += deltas[j];
                 }
             }
+        }
+        void calWeightedDeltas()
+        {
+
             for (size_t j = 0; j < inputSize; j++)
             {
                 double sum = 0;
