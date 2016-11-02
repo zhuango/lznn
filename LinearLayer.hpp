@@ -21,7 +21,7 @@ class LinearLayer
             input(input),
             output(Matrix(dataSize, Vector(outputSize, 0.0))),
             WeightDelta(Vector(outputSize, 0.0)),
-            deltas(Vector(outputSize), 0.0),
+            deltas(Vector(outputSize, 0.0)),
             W0(Vector(outputSize, 0.0)),
             W(Matrix(outputSize, Vector(inputSize, 0.0)))
         {
@@ -115,7 +115,7 @@ class LinearLayer
             {
                 for(size_t j = 0; j < outputSize; j++)
                 {
-                    deltas[j] = output[i][j] * (1 - putput[i][j]) * (*NextLinearWeightDelta)[j];
+                    deltas[j] = output[i][j] * (1 - output[i][j]) * (*NextLinearWeightDelta)[j];
                 }
                 for(size_t j = 0; j < outputSize; j++)
                 {
