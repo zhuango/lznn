@@ -1,3 +1,6 @@
+#ifndef _LINEARLAYER_H_
+#define _LINEARLAYER_H_
+
 #include "lznn_types.h"
 #include "lznn_math.hpp"
 #include <cmath>
@@ -19,10 +22,12 @@ class LinearLayer
         :
             input(input),
             output(Matrix(dataSize, Vector(outputSize, 0.0))),
-            WeightDelta(Vector(outputSize, 0.0)),
+            WeightDelta(Vector(inputSize, 0.0)),
             deltas(Vector(outputSize, 0.0)),
             W0(Vector(outputSize, 0.0)),
-            W(Matrix(outputSize, Vector(inputSize, 0.0)))
+            W(Matrix(outputSize, Vector(inputSize, 0.0))),
+            gredientW0(Vector(outputSize, 0.0)),
+            gredientW(Matrix(outputSize, Vector(inputSize, 0.0)))
         {
             this->dataSize   = dataSize;
             this->inputSize  = inputSize;
@@ -64,7 +69,21 @@ class LinearLayer
             }
             calWeightedDeltas();
         }
-
+        void CleanGredient()
+        {
+            for(int i = 0; i < outputSize; i++)
+            {
+                for(int j = 0; j < inputSize; j++)
+                {
+                    this->gredientW[i][j] = 0.0;
+                }
+                this->gredientW0[i] = 0.0;
+            }
+            for(int i = 0; i < inputSize; i++)
+            {
+                WeightDelta[i] = 0.0;
+            }
+        }
         Matrix *Output()
         {
             return &(this->output);
@@ -134,9 +153,11 @@ class LinearLayer
                 double sum = 0;
                 for (size_t i = 0; i < outputSize; i++)
                 {
-                    sum += deltas[i] * this->W[j][i];
+                    sum += deltas[i] * this->W[i][j];
                 }
                 this->WeightDelta[j] = sum;
             }
         }
 };
+
+#endif
