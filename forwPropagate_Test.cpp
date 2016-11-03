@@ -74,7 +74,7 @@ int main(void)
 
     size_t dataSize = 5000;
 
-    LinearLayer layer1(inputs, dataSize, 400, 25);
+    LinearLayer layer1(&inputs, dataSize, 400, 25);
     for(size_t i = 0; i < 25; i++)
     {
         layer1.W0[i] = W1[i][0];
@@ -86,7 +86,7 @@ int main(void)
     }
     layer1.ForwPropagate();
 
-    LinearLayer layer2(*(layer1.Output()), dataSize, 25, 10);
+    LinearLayer layer2(layer1.Output(), dataSize, 25, 10);
     for(size_t i = 0; i < 10; i++)
     {
         layer2.W0[i] = W2[i][0];

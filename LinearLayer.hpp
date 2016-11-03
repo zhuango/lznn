@@ -6,17 +6,16 @@
 class LinearLayer
 {
     public:
-
         Matrix W;
         Vector W0;
         Vector *NextLinearWeightDelta;
         Vector WeightDelta;
 
         LinearLayer(size_t dataSize, size_t inputSize, size_t outputSize)
-        :LinearLayer(Matrix(dataSize, Vector(inputSize, 0.0)), dataSize, inputSize, outputSize)
+        :LinearLayer(nullptr, dataSize, inputSize, outputSize)
         {
         }
-        LinearLayer(Matrix input, size_t dataSize, size_t inputSize, size_t outputSize)
+        LinearLayer(Matrix *input, size_t dataSize, size_t inputSize, size_t outputSize)
         :
             input(input),
             output(Matrix(dataSize, Vector(outputSize, 0.0))),
@@ -41,7 +40,7 @@ class LinearLayer
                     sum = 0.0;
                     for(int j = 0; j < inputSize; j++)
                     {
-                        sum += W[i][j] * input[k][j];
+                        sum += W[i][j] * (*input)[k][j];
                     }
                     output[k][i] = sigmoid(sum + W0[i]);
                 }
@@ -71,13 +70,13 @@ class LinearLayer
             return &(this->output);
         }
 
-        void SetInput(Matrix &intput)
+        void SetInput(Matrix *input)
         {
-            this->input = intput;
+            this->input = input;
         }
     private:
 
-        Matrix input;
+        Matrix *input;
         Matrix output;
         Matrix gredientW;
         Vector gredientW0;
@@ -121,7 +120,7 @@ class LinearLayer
                 {
                     for (size_t k = 0; k < inputSize; k++)
                     {
-                        this->gredientW[j][k] += deltas[j] * input[i][k];
+                        this->gredientW[j][k] += deltas[j] * (*input)[i][k];
                     }
                     this->gredientW0[j] += deltas[j];
                 }
