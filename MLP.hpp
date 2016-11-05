@@ -7,7 +7,7 @@ class MLP
     public:
         MLP(Matrix *input, VectorInt *labels, size_t dataSize, VectorInt &sizeOfLayers)
         :
-            deltas(Vector(sizeOfLayers[sizeOfLayers.size() - 1], 0.0))
+            deltas(Matrix(dataSize, Vector(sizeOfLayers[sizeOfLayers.size() - 1], 0.0)))
         {
             this->input         = input;
             this->labels        = labels;
@@ -58,10 +58,6 @@ class MLP
             {
                 layer.CleanGredient();
             }
-            for(int i = 0; i < this->deltas.size(); i++)
-            {
-                this->deltas[i] = 0.0;
-            }
         }
         Matrix *Output()
         {
@@ -77,10 +73,10 @@ class MLP
         // {
 
         // }
-    private:
         vector<LinearLayer> layers;
+    private:
         Matrix             *input;
-        Vector              deltas;
+        Matrix              deltas;
         VectorInt          *labels;
         Matrix             *output;
 
@@ -98,11 +94,11 @@ class MLP
                 {
                     if ((*labels)[i] == j)
                     {
-                        deltas[j] += (*output)[i][j] - 1.0;
+                        deltas[i][j] = (*output)[i][j] - 1.0;
                     }
                     else
                     {
-                        deltas[j] += (*output)[i][j] - 0.0; 
+                        deltas[i][j] = (*output)[i][j] - 0.0;
                     }
                 }
             }

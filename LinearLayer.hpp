@@ -11,8 +11,8 @@ class LinearLayer
     public:
         Matrix W;
         Vector W0;
-        Vector *NextLinearWeightDelta;
-        Vector WeightDelta;
+        Matrix *NextLinearWeightDelta;
+        Matrix WeightDelta;
 
         LinearLayer(size_t dataSize, size_t inputSize, size_t outputSize)
         :LinearLayer(nullptr, dataSize, inputSize, outputSize)
@@ -22,8 +22,8 @@ class LinearLayer
         :
             input(input),
             output(Matrix(dataSize, Vector(outputSize, 0.0))),
-            WeightDelta(Vector(inputSize, 0.0)),
-            deltas(Vector(outputSize, 0.0)),
+            WeightDelta(Matrix(dataSize, Vector(inputSize, 0.0))),
+            deltas(Matrix(dataSize, Vector(outputSize, 0.0))),
             W0(Vector(outputSize, 0.0)),
             W(Matrix(outputSize, Vector(inputSize, 0.0))),
             gredientW0(Vector(outputSize, 0.0)),
@@ -60,12 +60,12 @@ class LinearLayer
             {
                 for (int j = 0; j < inputSize; j++)
                 {
-                    W[i][j] += learningRate * gredientW[i][j];
+                    W[i][j] -= learningRate * gredientW[i][j];
                 }
             }
             for (int i = 0; i < outputSize; i++)
             {
-                W0[i] += learningRate * gredientW0[i];
+                W0[i] -= learningRate * gredientW0[i];
             }
             calWeightedDeltas();
         }
@@ -78,11 +78,7 @@ class LinearLayer
                     this->gredientW[i][j] = 0.0;
                 }
                 this->gredientW0[i] = 0.0;
-            }
-            for(int i = 0; i < inputSize; i++)
-            {
-                WeightDelta[i] = 0.0;
-            }
+            } 
         }
         Matrix *Output()
         {
@@ -99,7 +95,7 @@ class LinearLayer
         Matrix output;
         Matrix gredientW;
         Vector gredientW0;
-        Vector deltas;
+        Matrix deltas;
         size_t dataSize;
         size_t inputSize;
         size_t outputSize;
@@ -133,29 +129,31 @@ class LinearLayer
             {
                 for(size_t j = 0; j < outputSize; j++)
                 {
-                    deltas[j] = output[i][j] * (1 - output[i][j]) * (*NextLinearWeightDelta)[j];
+                    deltas[i][j] = output[i][j] * (1.0 - output[i][j]) * (*NextLinearWeightDelta)[i][j];
                 }
                 for(size_t j = 0; j < outputSize; j++)
                 {
                     for (size_t k = 0; k < inputSize; k++)
                     {
-                        this->gredientW[j][k] += deltas[j] * (*input)[i][k];
+                        this->gredientW[j][k] +=  deltas[i][j] * (*input)[i][k];
                     }
-                    this->gredientW0[j] += deltas[j];
+                    this->gredientW0[j] += deltas[i][j];
                 }
             }
         }
         void calWeightedDeltas()
         {
-
-            for (size_t j = 0; j < inputSize; j++)
+            for (size_t i = 0; i < dataSize; i++)
             {
-                double sum = 0;
-                for (size_t i = 0; i < outputSize; i++)
+                for (size_t j = 0; j < inputSize; j++)
                 {
-                    sum += deltas[i] * this->W[i][j];
+                    double sum = 0;
+                    for (size_t k = 0; k < outputSize; k++)
+                    {
+                        sum += deltas[i][k] * this->W[k][j];
+                    }
+                    this->WeightDelta[i][j] = sum;
                 }
-                this->WeightDelta[j] = sum;
             }
         }
 };
