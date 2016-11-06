@@ -73,7 +73,7 @@ int main(void)
     fillData("./data/Theta2.txt", W2);
     fillData("./data/label.txt", labels);
 
-    size_t dataSize = 20;//
+    size_t dataSize = 5000;//
 
     VectorInt layersNumbers;
     layersNumbers.push_back(400);
@@ -101,7 +101,7 @@ int main(void)
     // }
 
 
-    for (int j = 0; j < 50; j++)
+    for (int j = 0; j < 2000; j++)
     {
         mlp.ForwPropagate();
 
@@ -127,9 +127,10 @@ int main(void)
             }
             //cout << predict << " " << labels[i] << " " << currectCounter << endl;//////////
         }
-        cout << "iter: " << j << " " << double(currectCounter / dataSize) << endl;
+        cout << "iter: " << j << " " << double(double(currectCounter) / double(dataSize)) << endl;
 
         mlp.BackPropagate(0.1);
+        //mlp.Update(0.1);
         mlp.CleanGredient();
     }
     

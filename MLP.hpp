@@ -52,6 +52,13 @@ class MLP
                 i -= 1;
             }
         }
+        void Update(double learningRate)
+        {
+            for(auto &layer: this->layers)
+            {
+                layer.Update(learningRate);
+            }
+        }
         void CleanGredient()
         {
             for(auto &layer: layers)
@@ -90,15 +97,20 @@ class MLP
             for(size_t i = 0; i < dataSize; i++)
             {
                 //predict = softmax((*output)[i]);
+                double sum = 0.0;
+                for (size_t j = 0; j < outputSize; j++)
+                {
+                    sum += (*output)[i][j];             
+                }
                 for(size_t j = 0; j < outputSize; j++)
                 {
                     if ((*labels)[i] == j)
                     {
-                        deltas[i][j] = (*output)[i][j] - 1.0;
+                        deltas[i][j] = ((*output)[i][j] / sum) - 1.0;
                     }
                     else
                     {
-                        deltas[i][j] = (*output)[i][j] - 0.0;
+                        deltas[i][j] = ((*output)[i][j] / sum) - 0.0;
                     }
                 }
             }

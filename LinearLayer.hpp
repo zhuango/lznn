@@ -54,20 +54,23 @@ class LinearLayer
 
         void BackPropagate(double learningRate)
         {
-            //TODO: back propagate
             calculateGredientW();
+            Update(learningRate);
+            calWeightedDeltas();
+        }
+        void Update(double learningRate)
+        {            
             for (int i = 0; i < outputSize; i++)
             {
                 for (int j = 0; j < inputSize; j++)
                 {
-                    W[i][j] -= learningRate * gredientW[i][j];
+                    W[i][j] += learningRate * gredientW[i][j];
                 }
             }
             for (int i = 0; i < outputSize; i++)
             {
-                W0[i] -= learningRate * gredientW0[i];
+                W0[i] += learningRate * gredientW0[i];
             }
-            calWeightedDeltas();
         }
         void CleanGredient()
         {
@@ -107,7 +110,7 @@ class LinearLayer
         }
         double sigmoidGredient(double in)
         {
-            double result = sigmoid(in) * (1 - sigmoid(in));
+            double result = sigmoid(in) * (1.0 - sigmoid(in));
             return result;
         }
         void initW()
