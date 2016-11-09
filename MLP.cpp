@@ -1,4 +1,4 @@
-#include "LinearLayer.hpp"
+#include "LinearLayer.cpp"
 #include "lznn_types.h"
 #include <list>
 

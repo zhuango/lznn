@@ -5,8 +5,8 @@
 
 using namespace std;
 
-#include "LinearLayer.hpp"
-#include "lznn_types.h"
+#include "../LinearLayer.cpp"
+#include "../lznn_types.h"
 
 vector<string> *split(string line, char delim)
 {

@@ -2,7 +2,7 @@
 #define _LINEARLAYER_H_
 
 #include "lznn_types.h"
-#include "lznn_math.hpp"
+#include "lznn_math.cpp"
 #include <cmath>
 #include <random>
 
@@ -54,6 +54,7 @@ class LinearLayer
 
         void BackPropagate(double learningRate)
         {
+            dump(NextLinearWeightDelta);
             calculateGredientW();
             Update(learningRate);
             calWeightedDeltas();

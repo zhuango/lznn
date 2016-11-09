@@ -1,7 +1,7 @@
 #include<vector>
 #include<iostream>
 using namespace std;
-#include "lznn_types.h"
+#include "../lznn_types.h"
 class T
 {
     public:

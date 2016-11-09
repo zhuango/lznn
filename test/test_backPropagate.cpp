@@ -5,9 +5,9 @@
 
 using namespace std;
 
-#include "LinearLayer.hpp"
-#include "lznn_types.h"
-#include "MLP.hpp"
+#include "../LinearLayer.cpp"
+#include "../lznn_types.h"
+#include "../MLP.cpp"
 
 vector<string> *split(string line, char delim)
 {
@@ -73,7 +73,7 @@ int main(void)
     fillData("./data/Theta2.txt", W2);
     fillData("./data/label.txt", labels);
 
-    size_t dataSize = 5000;//
+    size_t dataSize = 1;//
 
     VectorInt layersNumbers;
     layersNumbers.push_back(400);
