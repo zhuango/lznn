@@ -1,5 +1,7 @@
 #include "LinearLayer.cpp"
 #include "lznn_types.h"
+#include "tools.cpp"
+
 #include <list>
 
 class MLP
@@ -43,12 +45,17 @@ class MLP
 
             layers[numberOfLayer - 1].NextLinearWeightDelta = &(this->deltas);
             layers[numberOfLayer - 1].BackPropagate(learningRate);
-      
+            //Debug////////////////
+            Tools::dump(*(layers[numberOfLayer - 1].NextLinearWeightDelta), Tools::ToString(numberOfLayer - 1), "weightDelte");
+            //Debug////////////////
             int i = numberOfLayer - 2;
             while(i >= 0)
             {
                 layers[i].NextLinearWeightDelta = &(layers[i + 1].WeightDelta);
                 layers[i].BackPropagate(learningRate);
+                //Debug////////////////
+                Tools::dump(*(layers[i].NextLinearWeightDelta), Tools::ToString(i), "weightDelte");
+                //Debug////////////////
                 i -= 1;
             }
         }

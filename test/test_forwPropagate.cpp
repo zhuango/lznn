@@ -67,10 +67,10 @@ int main(void)
     Matrix W2;
     VectorInt labels;
     
-    fillData("./data/X.txt", inputs);
-    fillData("./data/Theta1.txt", W1);
-    fillData("./data/Theta2.txt", W2);
-    fillData("./data/label.txt", labels);
+    fillData("../data/X.txt", inputs);
+    fillData("../data/Theta1.txt", W1);
+    fillData("../data/Theta2.txt", W2);
+    fillData("../data/label.txt", labels);
 
     size_t dataSize = 5000;
 

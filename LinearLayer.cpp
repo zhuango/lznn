@@ -54,7 +54,6 @@ class LinearLayer
 
         void BackPropagate(double learningRate)
         {
-            dump(NextLinearWeightDelta);
             calculateGredientW();
             Update(learningRate);
             calWeightedDeltas();
@@ -93,13 +92,13 @@ class LinearLayer
         {
             this->input = input;
         }
+        Matrix deltas;
     private:
 
         Matrix *input;
         Matrix output;
         Matrix gredientW;
         Vector gredientW0;
-        Matrix deltas;
         size_t dataSize;
         size_t inputSize;
         size_t outputSize;

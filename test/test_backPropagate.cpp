@@ -68,10 +68,10 @@ int main(void)
     Matrix W2;
     VectorInt labels;
     
-    fillData("./data/X.txt", inputs);
-    fillData("./data/Theta1.txt", W1);
-    fillData("./data/Theta2.txt", W2);
-    fillData("./data/label.txt", labels);
+    fillData("../data/X.txt", inputs);
+    fillData("../data/Theta1.txt", W1);
+    fillData("../data/Theta2.txt", W2);
+    fillData("../data/label.txt", labels);
 
     size_t dataSize = 1;//
 
@@ -101,7 +101,7 @@ int main(void)
     // }
 
 
-    for (int j = 0; j < 2000; j++)
+    for (int j = 0; j < 1; j++)
     {
         mlp.ForwPropagate();
 
