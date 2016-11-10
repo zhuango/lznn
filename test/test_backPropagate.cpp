@@ -2,6 +2,7 @@
 #include<fstream>
 #include<sstream>
 #include<vector>
+#include<random>
 
 using namespace std;
 
@@ -73,11 +74,20 @@ int main(void)
     fillData("../data/Theta2.txt", W2);
     fillData("../data/label.txt", labels);
 
+//Debug
+    std::default_random_engine generator;
+    std::uniform_real_distribution<double> dis(-2, 2);
+    for(int i = 0;i < 20; i ++)
+    {
+        inputs[0][i] = dis(generator);
+    }
+//Debug
+
     size_t dataSize = 1;//
 
     VectorInt layersNumbers;
-    layersNumbers.push_back(400);
-    layersNumbers.push_back(25);
+    layersNumbers.push_back(20);
+    layersNumbers.push_back(15);
     layersNumbers.push_back(10);
 
     MLP mlp(&inputs, &labels, dataSize, layersNumbers);

@@ -87,7 +87,26 @@ class LinearLayer
         {
             return &(this->output);
         }
-
+        Matrix* Input()
+        {
+            return this->input;
+        }
+        Matrix* GetW()
+        {
+            return &(this->W);
+        }
+        Vector* GetW0()
+        {
+            return &(this->W0);
+        }
+        Matrix* GetGredientW()
+        {
+            return &(this->gredientW);
+        }
+        Vector* GetGredientW0()
+        {
+            return &(this->gredientW0);
+        }
         void SetInput(Matrix *input)
         {
             this->input = input;
