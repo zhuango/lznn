@@ -121,6 +121,7 @@ class LinearLayer
         size_t dataSize;
         size_t inputSize;
         size_t outputSize;
+        static std::default_random_engine generator;
 
         double sigmoid(double in)
         {
@@ -134,15 +135,14 @@ class LinearLayer
         }
         void initW()
         {
-            std::default_random_engine generator;
             std::uniform_real_distribution<double> distribution(-1.0, 1.0);
             for (size_t i = 0; i < this->outputSize; i++)
             {
                 for (size_t j = 0; j < this->inputSize; j++)
                 {
-                    W[i][j] = distribution(generator);
+                    W[i][j] = distribution(LinearLayer::generator);
                 }
-                W0[i] = distribution(generator);
+                W0[i] = distribution(LinearLayer::generator);
             }
         }
         void calculateGredientW()
@@ -180,4 +180,5 @@ class LinearLayer
         }
 };
 
+std::default_random_engine LinearLayer::generator;
 #endif
