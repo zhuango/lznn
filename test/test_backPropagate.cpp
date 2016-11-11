@@ -111,7 +111,7 @@ int main(void)
     // }
 
 
-    for (int j = 0; j < 200; j++)
+    for (int j = 0; j < 2000; j++)
     {
         mlp.ForwPropagate();
 

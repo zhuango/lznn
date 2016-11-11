@@ -43,39 +43,39 @@ class MLP
         {
             calculateDeltas();
             //Debug////////////////
-            Tools::dump(*(layers[numberOfLayer - 1].GetW()), "W_" + Tools::ToString(numberOfLayer - 1), "W");
-            Tools::dump(*(layers[numberOfLayer - 1].GetW0()), "W0_" + Tools::ToString(numberOfLayer - 1), "W0");
+            // Tools::dump(*(layers[numberOfLayer - 1].GetW()), "W_" + Tools::ToString(numberOfLayer - 1), "W");
+            // Tools::dump(*(layers[numberOfLayer - 1].GetW0()), "W0_" + Tools::ToString(numberOfLayer - 1), "W0");
             //Debug////////////////
             layers[numberOfLayer - 1].NextLinearWeightDelta = &(this->deltas);
             layers[numberOfLayer - 1].BackPropagate(learningRate);
             //Debug////////////////
-            Tools::dump(*(layers[numberOfLayer - 1].NextLinearWeightDelta), "NextLinearWeightDelta_" + Tools::ToString(numberOfLayer - 1), "NextLinearWeightDelta");
-            Tools::dump(*(layers[numberOfLayer - 1].Input()), "input_" + Tools::ToString(numberOfLayer - 1), "input");
-            Tools::dump(*(layers[numberOfLayer - 1].Output()), "output_" + Tools::ToString(numberOfLayer - 1), "output");
-            Tools::dump(*(layers[numberOfLayer - 1].GetGredientW()), "gredientW_" + Tools::ToString(numberOfLayer - 1), "GredientW");
-            Tools::dump(*(layers[numberOfLayer - 1].GetGredientW0()), "gredientW0_" + Tools::ToString(numberOfLayer - 1), "GredientW0");
-            Tools::dump(*(layers[numberOfLayer - 1].GetW()), "Back_W_" + Tools::ToString(numberOfLayer - 1), "W");
-            Tools::dump(*(layers[numberOfLayer - 1].GetW0()), "Back_W0_" + Tools::ToString(numberOfLayer - 1), "W0");
-            Tools::dump(layers[numberOfLayer - 1].deltas, "deltas" + Tools::ToString(numberOfLayer - 1), "deltas");
+            // Tools::dump(*(layers[numberOfLayer - 1].NextLinearWeightDelta), "NextLinearWeightDelta_" + Tools::ToString(numberOfLayer - 1), "NextLinearWeightDelta");
+            // Tools::dump(*(layers[numberOfLayer - 1].Input()), "input_" + Tools::ToString(numberOfLayer - 1), "input");
+            // Tools::dump(*(layers[numberOfLayer - 1].Output()), "output_" + Tools::ToString(numberOfLayer - 1), "output");
+            // Tools::dump(*(layers[numberOfLayer - 1].GetGredientW()), "gredientW_" + Tools::ToString(numberOfLayer - 1), "GredientW");
+            // Tools::dump(*(layers[numberOfLayer - 1].GetGredientW0()), "gredientW0_" + Tools::ToString(numberOfLayer - 1), "GredientW0");
+            // Tools::dump(*(layers[numberOfLayer - 1].GetW()), "Back_W_" + Tools::ToString(numberOfLayer - 1), "W");
+            // Tools::dump(*(layers[numberOfLayer - 1].GetW0()), "Back_W0_" + Tools::ToString(numberOfLayer - 1), "W0");
+            // Tools::dump(layers[numberOfLayer - 1].deltas, "deltas" + Tools::ToString(numberOfLayer - 1), "deltas");
             //Debug////////////////
             int i = numberOfLayer - 2;
             while(i >= 0)
             {
                 //Debug////////////////
-                Tools::dump(*(layers[i].GetW()), "W_" + Tools::ToString(i), "W");
-                Tools::dump(*(layers[i].GetW0()), "W0_" + Tools::ToString(i), "W0");
+                // Tools::dump(*(layers[i].GetW()), "W_" + Tools::ToString(i), "W");
+                // Tools::dump(*(layers[i].GetW0()), "W0_" + Tools::ToString(i), "W0");
                 //Debug////////////////
                 layers[i].NextLinearWeightDelta = &(layers[i + 1].WeightDelta);
                 layers[i].BackPropagate(learningRate);
                 //Debug////////////////
-                Tools::dump(*(layers[i].NextLinearWeightDelta), "NextLinearWeightDelta_" + Tools::ToString(i), "NextLinearWeightDelta");
-                Tools::dump(*(layers[i].Input()), "input_" + Tools::ToString(i), "input");
-                Tools::dump(*(layers[i].Output()), "output_" + Tools::ToString(i), "output");
-                Tools::dump(*(layers[i].GetGredientW()), "gredientW_" + Tools::ToString(i), "GredientW");
-                Tools::dump(*(layers[i].GetGredientW0()), "gredientW0_" + Tools::ToString(i), "GredientW0");
-                Tools::dump(*(layers[i].GetW()), "Back_W_" + Tools::ToString(i), "W");
-                Tools::dump(*(layers[i].GetW0()), "Back_W0_" + Tools::ToString(i), "W0");
-                Tools::dump(layers[i].deltas, "deltas" + Tools::ToString(i), "deltas");
+                // Tools::dump(*(layers[i].NextLinearWeightDelta), "NextLinearWeightDelta_" + Tools::ToString(i), "NextLinearWeightDelta");
+                // Tools::dump(*(layers[i].Input()), "input_" + Tools::ToString(i), "input");
+                // Tools::dump(*(layers[i].Output()), "output_" + Tools::ToString(i), "output");
+                // Tools::dump(*(layers[i].GetGredientW()), "gredientW_" + Tools::ToString(i), "GredientW");
+                // Tools::dump(*(layers[i].GetGredientW0()), "gredientW0_" + Tools::ToString(i), "GredientW0");
+                // Tools::dump(*(layers[i].GetW()), "Back_W_" + Tools::ToString(i), "W");
+                // Tools::dump(*(layers[i].GetW0()), "Back_W0_" + Tools::ToString(i), "W0");
+                // Tools::dump(layers[i].deltas, "deltas" + Tools::ToString(i), "deltas");
                 //Debug////////////////
                 i -= 1;
             }
@@ -123,13 +123,7 @@ class MLP
         void calculateDeltas()
         {
             for(size_t i = 0; i < dataSize; i++)
-            {
-                //predict = softmax((*output)[i]);
-                double sum = 0.0;
-                // for (size_t j = 0; j < outputSize; j++)
-                // {
-                //     sum += (*output)[i][j];             
-                // }
+            {   
                 for(size_t j = 0; j < outputSize; j++)
                 {
                     if ((*labels)[i] == j)
