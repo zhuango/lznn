@@ -75,19 +75,19 @@ int main(void)
     fillData("../data/label.txt", labels);
 
 //Debug
-    std::default_random_engine generator;
-    std::uniform_real_distribution<double> dis(-2, 2);
-    for(int i = 0;i < 20; i ++)
-    {
-        inputs[0][i] = dis(generator);
-    }
+    // std::default_random_engine generator;
+    // std::uniform_real_distribution<double> dis(-2, 2);
+    // for(int i = 0;i < 20; i ++)
+    // {
+    //     inputs[0][i] = dis(generator);
+    // }
 //Debug
 
-    size_t dataSize = 1;//
+    size_t dataSize =5000;//
 
     VectorInt layersNumbers;
-    layersNumbers.push_back(20);
-    layersNumbers.push_back(15);
+    layersNumbers.push_back(400);
+    layersNumbers.push_back(25);
     layersNumbers.push_back(10);
 
     MLP mlp(&inputs, &labels, dataSize, layersNumbers);
@@ -111,7 +111,7 @@ int main(void)
     // }
 
 
-    for (int j = 0; j < 1; j++)
+    for (int j = 0; j < 200; j++)
     {
         mlp.ForwPropagate();
 
@@ -138,8 +138,8 @@ int main(void)
             //cout << predict << " " << labels[i] << " " << currectCounter << endl;//////////
         }
         cout << "iter: " << j << " " << double(double(currectCounter) / double(dataSize)) << endl;
-
-        mlp.BackPropagate(0.1);
+        
+        mlp.BackPropagate(1.0/double(dataSize));
         //mlp.Update(0.1);
         mlp.CleanGredient();
     }

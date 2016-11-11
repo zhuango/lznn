@@ -56,6 +56,7 @@ class MLP
             Tools::dump(*(layers[numberOfLayer - 1].GetGredientW0()), "gredientW0_" + Tools::ToString(numberOfLayer - 1), "GredientW0");
             Tools::dump(*(layers[numberOfLayer - 1].GetW()), "Back_W_" + Tools::ToString(numberOfLayer - 1), "W");
             Tools::dump(*(layers[numberOfLayer - 1].GetW0()), "Back_W0_" + Tools::ToString(numberOfLayer - 1), "W0");
+            Tools::dump(layers[numberOfLayer - 1].deltas, "deltas" + Tools::ToString(numberOfLayer - 1), "deltas");
             //Debug////////////////
             int i = numberOfLayer - 2;
             while(i >= 0)
@@ -74,6 +75,7 @@ class MLP
                 Tools::dump(*(layers[i].GetGredientW0()), "gredientW0_" + Tools::ToString(i), "GredientW0");
                 Tools::dump(*(layers[i].GetW()), "Back_W_" + Tools::ToString(i), "W");
                 Tools::dump(*(layers[i].GetW0()), "Back_W0_" + Tools::ToString(i), "W0");
+                Tools::dump(layers[i].deltas, "deltas" + Tools::ToString(i), "deltas");
                 //Debug////////////////
                 i -= 1;
             }
@@ -124,19 +126,19 @@ class MLP
             {
                 //predict = softmax((*output)[i]);
                 double sum = 0.0;
-                for (size_t j = 0; j < outputSize; j++)
-                {
-                    sum += (*output)[i][j];             
-                }
+                // for (size_t j = 0; j < outputSize; j++)
+                // {
+                //     sum += (*output)[i][j];             
+                // }
                 for(size_t j = 0; j < outputSize; j++)
                 {
                     if ((*labels)[i] == j)
                     {
-                        deltas[i][j] = ((*output)[i][j] / sum) - 1.0;
+                        deltas[i][j] = 1.0 - ((*output)[i][j]);
                     }
                     else
                     {
-                        deltas[i][j] = ((*output)[i][j] / sum) - 0.0;
+                        deltas[i][j] = 0.0 - ((*output)[i][j]);
                     }
                 }
             }
