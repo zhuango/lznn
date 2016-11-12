@@ -1,4 +1,4 @@
-#include "../tools.cpp"
+#include "../lznn_tools.cpp"
 
 int main(void)
 {

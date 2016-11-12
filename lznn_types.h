@@ -7,4 +7,5 @@ typedef vector< vector<double> > Matrix;
 typedef vector< vector<int> > MatrixInt;
 typedef vector<double> Vector;
 typedef vector<int> VectorInt;
+
 #endif

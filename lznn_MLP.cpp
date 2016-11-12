@@ -1,6 +1,6 @@
-#include "LinearLayer.cpp"
+#include "lznn_PerceptronLayer.cpp"
 #include "lznn_types.h"
-#include "tools.cpp"
+#include "lznn_tools.cpp"
 
 #include <list>
 
@@ -21,7 +21,7 @@ class MLP
             size_t i = 1;
             while (i <= numberOfLayer)
             {
-                this->layers.push_back(LinearLayer(dataSize, sizeOfLayers[i - 1], sizeOfLayers[i]));
+                this->layers.push_back(PerceptronLayer(dataSize, sizeOfLayers[i - 1], sizeOfLayers[i]));
                 i += 1;
             }
         }
@@ -108,7 +108,7 @@ class MLP
         // {
 
         // }
-        vector<LinearLayer> layers;
+        vector<PerceptronLayer> layers;
     private:
         Matrix             *input;
         Matrix              deltas;

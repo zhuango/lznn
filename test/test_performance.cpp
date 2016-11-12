@@ -3,8 +3,9 @@
 #include<sstream>
 #include<vector>
 #include<random>
-
+#include<ctime>
 using namespace std;
+
 #include "common.h"
 
 vector<string> *split(string line, char delim)
@@ -107,37 +108,50 @@ int main(void)
     //     }
     // }
 
+    clock_t startForw;
+    clock_t startBack;
+    clock_t forwDone;
+    clock_t backDone;
 
     for (int j = 0; j < 2000; j++)
     {
+        //performance/////////////
+        startForw = clock();
+        //performance/////////////
         mlp.ForwPropagate();
+        //performance/////////////
+        forwDone = clock();
+        cout << "forward: " << float(forwDone - startForw) / CLOCKS_PER_SEC << " s." << endl;
+        //performance/////////////
 
         Matrix *output = mlp.Output();
-
         int currectCounter = 0;
         for(size_t i = 0; i < dataSize; i++)
         {
             size_t predict = 0;
             for (size_t j = 0; j < 10; j++)
             {
-                //cout << (*output)[0][j] << " ";
                 if ((*output)[i][j] > (*output)[i][predict])
                 {
                     predict = j;
                 }
-                //cout << (*output)[i][j] << " ";
             }
-            //cout << endl;
             if (predict == labels[i])
             {
                 currectCounter += 1;
             }
-            //cout << predict << " " << labels[i] << " " << currectCounter << endl;//////////
         }
-        cout << "iter: " << j << " " << double(double(currectCounter) / double(dataSize)) << endl;
-        
+        //cout << "iter: " << j << " " << double(double(currectCounter) / double(dataSize)) << endl;
+
+        //performance/////////////
+        startBack = clock();
+        //performance/////////////
         mlp.BackPropagate(1.0/double(dataSize));
-        //mlp.Update(0.1);
+        //performance/////////////
+        backDone = clock();
+        cout << "backward: " << float(backDone - startBack) / CLOCKS_PER_SEC << " s." << endl;
+        //performance/////////////
+        
         mlp.CleanGredient();
     }
     

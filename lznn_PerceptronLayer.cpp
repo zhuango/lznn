@@ -1,12 +1,13 @@
-#ifndef _LINEARLAYER_H_
-#define _LINEARLAYER_H_
+#ifndef _PerceptronLayer_H_
+#define _PerceptronLayer_H_
 
 #include "lznn_types.h"
 #include "lznn_math.cpp"
 #include <cmath>
 #include <random>
+#include <ctime>
 
-class LinearLayer
+class PerceptronLayer
 {
     public:
         Matrix W;
@@ -14,11 +15,11 @@ class LinearLayer
         Matrix *NextLinearWeightDelta;
         Matrix WeightDelta;
 
-        LinearLayer(size_t dataSize, size_t inputSize, size_t outputSize)
-        :LinearLayer(nullptr, dataSize, inputSize, outputSize)
+        PerceptronLayer(size_t dataSize, size_t inputSize, size_t outputSize)
+        :PerceptronLayer(nullptr, dataSize, inputSize, outputSize)
         {
         }
-        LinearLayer(Matrix *input, size_t dataSize, size_t inputSize, size_t outputSize)
+        PerceptronLayer(Matrix *input, size_t dataSize, size_t inputSize, size_t outputSize)
         :
             input(input),
             output(Matrix(dataSize, Vector(outputSize, 0.0))),
@@ -54,9 +55,32 @@ class LinearLayer
 
         void BackPropagate(double learningRate)
         {
+            //performance/////////
+            clock_t start = clock();
+            //performance/////////
+
             calculateGredientW();
+
+            //performance/////////
+            clock_t calGredient = clock() - start;
+            cout << "calculateGredientW: " << float(calGredient)/CLOCKS_PER_SEC << endl;
+            calGredient = clock();
+            //performance/////////
+
             Update(learningRate);
+
+            //performance/////////
+            clock_t update = clock() - calGredient;
+            cout << "update: " << float(update)/CLOCKS_PER_SEC << endl;
+            update = clock();
+            //performance/////////
+
             calWeightedDeltas();
+
+            //performance/////////
+            clock_t calWeightedDelta = clock() - update;
+            cout << "calWeightedDelta: " << float(calWeightedDelta)/CLOCKS_PER_SEC << endl;
+            //performance/////////
         }
         void Update(double learningRate)
         {            
@@ -140,9 +164,9 @@ class LinearLayer
             {
                 for (size_t j = 0; j < this->inputSize; j++)
                 {
-                    W[i][j] = distribution(LinearLayer::generator);
+                    W[i][j] = distribution(PerceptronLayer::generator);
                 }
-                W0[i] = distribution(LinearLayer::generator);
+                W0[i] = distribution(PerceptronLayer::generator);
             }
         }
         void calculateGredientW()
@@ -180,5 +204,7 @@ class LinearLayer
         }
 };
 
-std::default_random_engine LinearLayer::generator;
+std::default_random_engine PerceptronLayer::generator;
+
+
 #endif
