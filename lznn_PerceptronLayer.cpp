@@ -56,30 +56,30 @@ class PerceptronLayer
         void BackPropagate(double learningRate)
         {
             //performance/////////
-            clock_t start = clock();
+            // clock_t start = clock();
             //performance/////////
 
             calculateGredientW();
 
             //performance/////////
-            clock_t calGredient = clock() - start;
-            cout << "calculateGredientW: " << float(calGredient)/CLOCKS_PER_SEC << endl;
-            calGredient = clock();
+            // clock_t calGredient = clock() - start;
+            // cout << "calculateGredientW: " << float(calGredient)/CLOCKS_PER_SEC << endl;
+            // calGredient = clock();
             //performance/////////
 
             Update(learningRate);
 
             //performance/////////
-            clock_t update = clock() - calGredient;
-            cout << "update: " << float(update)/CLOCKS_PER_SEC << endl;
-            update = clock();
+            // clock_t update = clock() - calGredient;
+            // cout << "update: " << float(update)/CLOCKS_PER_SEC << endl;
+            // update = clock();
             //performance/////////
 
             calWeightedDeltas();
 
             //performance/////////
-            clock_t calWeightedDelta = clock() - update;
-            cout << "calWeightedDelta: " << float(calWeightedDelta)/CLOCKS_PER_SEC << endl;
+            // clock_t calWeightedDelta = clock() - update;
+            // cout << "calWeightedDelta: " << float(calWeightedDelta)/CLOCKS_PER_SEC << endl;
             //performance/////////
         }
         void Update(double learningRate)
