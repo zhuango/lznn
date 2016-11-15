@@ -10,6 +10,9 @@ fptest: test_forwPropagate.cpp ../lznn_PerceptronLayer.cpp ../lznn_types.h
 bptest: test_backPropagate.cpp ../lznn_PerceptronLayer.cpp ../lznn_MLP.cpp ../lznn_types.h 
 	g++ test_backPropagate.cpp -o test_backPropagate -std=c++11 -g
 
+bpRtest: test_backPropagateRegularizedPerceptronLayer.cpp ../lznn_PerceptronLayer.cpp ../lznn_RegularizedPerceptronLayer.cpp ../lznn_MLP.cpp ../lznn_types.h 
+	g++ test_backPropagateRegularizedPerceptronLayer.cpp -o test_backPropagateRegularizedPerceptronLayer -std=c++11 -g
+
 test_performance: test_performance.cpp ../lznn_PerceptronLayer.cpp ../lznn_MLP.cpp ../lznn_types.h 
 	g++ test_performance.cpp -o test_performance -std=c++11 -g
 

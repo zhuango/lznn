@@ -10,8 +10,6 @@
 class PerceptronLayer
 {
     public:
-        Matrix W;
-        Vector W0;
         Matrix *NextLinearWeightDelta;
         Matrix WeightDelta;
 
@@ -53,7 +51,7 @@ class PerceptronLayer
             }
         }
 
-        void BackPropagate(double learningRate)
+        virtual void BackPropagate(double learningRate)
         {
             //performance/////////
             // clock_t start = clock();
@@ -67,7 +65,7 @@ class PerceptronLayer
             // calGredient = clock();
             //performance/////////
 
-            Update(learningRate);
+            update(learningRate);
 
             //performance/////////
             // clock_t update = clock() - calGredient;
@@ -81,20 +79,6 @@ class PerceptronLayer
             // clock_t calWeightedDelta = clock() - update;
             // cout << "calWeightedDelta: " << float(calWeightedDelta)/CLOCKS_PER_SEC << endl;
             //performance/////////
-        }
-        void Update(double learningRate)
-        {            
-            for (int i = 0; i < outputSize; i++)
-            {
-                for (int j = 0; j < inputSize; j++)
-                {
-                    W[i][j] += learningRate * gredientW[i][j];
-                }
-            }
-            for (int i = 0; i < outputSize; i++)
-            {
-                W0[i] += learningRate * gredientW0[i];
-            }
         }
         void CleanGredient()
         {
@@ -136,39 +120,13 @@ class PerceptronLayer
             this->input = input;
         }
         Matrix deltas;
-    private:
 
-        Matrix *input;
-        Matrix output;
-        Matrix gredientW;
-        Vector gredientW0;
-        size_t dataSize;
+    protected:
+        Matrix W;
+        Vector W0;
         size_t inputSize;
         size_t outputSize;
-        static std::default_random_engine generator;
 
-        double sigmoid(double in)
-        {
-            double result = 1.0 / (1.0 + exp(-in));
-            return result;
-        }
-        double sigmoidGredient(double in)
-        {
-            double result = sigmoid(in) * (1.0 - sigmoid(in));
-            return result;
-        }
-        void initW()
-        {
-            std::uniform_real_distribution<double> distribution(-1.0, 1.0);
-            for (size_t i = 0; i < this->outputSize; i++)
-            {
-                for (size_t j = 0; j < this->inputSize; j++)
-                {
-                    W[i][j] = distribution(PerceptronLayer::generator);
-                }
-                W0[i] = distribution(PerceptronLayer::generator);
-            }
-        }
         void calculateGredientW()
         {
             for(size_t i = 0; i < dataSize; i++)
@@ -200,6 +158,52 @@ class PerceptronLayer
                     }
                     this->WeightDelta[i][j] = sum;
                 }
+            }
+        }
+        void update(double learningRate)
+        {            
+            for (int i = 0; i < outputSize; i++)
+            {
+                for (int j = 0; j < inputSize; j++)
+                {
+                    W[i][j] += learningRate * gredientW[i][j];
+                }
+            }
+            for (int i = 0; i < outputSize; i++)
+            {
+                W0[i] += learningRate * gredientW0[i];
+            }
+        }
+
+    private:
+
+        Matrix *input;
+        Matrix output;
+        Matrix gredientW;
+        Vector gredientW0;
+        size_t dataSize;
+        static std::default_random_engine generator;
+
+        double sigmoid(double in)
+        {
+            double result = 1.0 / (1.0 + exp(-in));
+            return result;
+        }
+        double sigmoidGredient(double in)
+        {
+            double result = sigmoid(in) * (1.0 - sigmoid(in));
+            return result;
+        }
+        void initW()
+        {
+            std::uniform_real_distribution<double> distribution(-1.0, 1.0);
+            for (size_t i = 0; i < this->outputSize; i++)
+            {
+                for (size_t j = 0; j < this->inputSize; j++)
+                {
+                    W[i][j] = distribution(PerceptronLayer::generator);
+                }
+                W0[i] = distribution(PerceptronLayer::generator);
             }
         }
 };

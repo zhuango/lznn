@@ -17,7 +17,7 @@ class T
         int b;
     private:
 };
-int main(void)
+void testMuldimen()
 {
     vector< vector<int> > mutimen;
     vector<int> single1;
@@ -44,6 +44,44 @@ int main(void)
 
     T t(3);
     cout << t.va.size() << " " << t.b << endl;
+}
+
+class A
+{
+    public:
+        A(int a)
+        :a(a)
+        {
+            cout << a << " in A" << endl;
+        }
+        virtual void print()
+        {
+            cout << "A" << endl;
+        }
+    protected:
+        int a;
+};
+class B: public A
+{
+    public:
+        B(int a)
+        :A(a)
+        {
+
+        }
+        void print()
+        {
+            cout << "B" << endl;
+        }
+        int getA()
+        {
+            return a;
+        }
+};
+int main(void)
+{
+    A *a = new B(1);
+    a->print();
+
     return 1;
-    
 }

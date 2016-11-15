@@ -1,4 +1,8 @@
+#ifndef _MLP_H_
+#define _MLP_H_
+
 #include "lznn_PerceptronLayer.cpp"
+#include "lznn_RegularizedPerceptronLayer.cpp"
 #include "lznn_types.h"
 #include "lznn_tools.cpp"
 
@@ -22,6 +26,24 @@ class MLP
             while (i <= numberOfLayer)
             {
                 this->layers.push_back(PerceptronLayer(dataSize, sizeOfLayers[i - 1], sizeOfLayers[i]));
+                i += 1;
+            }
+        }        
+        MLP(Matrix *input, VectorInt *labels, size_t dataSize, VectorInt &sizeOfLayers, double regularizationCoefficient)
+        :
+            deltas(Matrix(dataSize, Vector(sizeOfLayers[sizeOfLayers.size() - 1], 0.0)))
+        {
+            this->input         = input;
+            this->labels        = labels;
+            this->numberOfLayer = sizeOfLayers.size() - 1;
+            this->dataSize      = dataSize;
+            this->inputSize     = sizeOfLayers[0];
+            this->outputSize    = sizeOfLayers[numberOfLayer];
+
+            size_t i = 1;
+            while (i <= numberOfLayer)
+            {
+                this->layers.push_back(RegularizedPerceptronLayer(dataSize, sizeOfLayers[i - 1], sizeOfLayers[i], regularizationCoefficient));
                 i += 1;
             }
         }
@@ -78,13 +100,6 @@ class MLP
                 // Tools::dump(layers[i].deltas, "deltas" + Tools::ToString(i), "deltas");
                 //Debug////////////////
                 i -= 1;
-            }
-        }
-        void Update(double learningRate)
-        {
-            for(auto &layer: this->layers)
-            {
-                layer.Update(learningRate);
             }
         }
         void CleanGredient()
@@ -150,3 +165,5 @@ class MLP
             return max;
         }
 };
+
+#endif
