@@ -1,9 +1,9 @@
 #ifndef _COMMON_H_
 #define _COMMON_H_
 
-#include "../lznn_PerceptronLayer.cpp"
-#include "../lznn_types.h"
-#include "../lznn_MLP.cpp"
-#include "../lznn_tools.cpp"
+#include "../src/lznn_PerceptronLayer.cpp"
+#include "../src/lznn_types.h"
+#include "../src/lznn_MLP.cpp"
+#include "../src/lznn_tools.cpp"
 
 #endif
