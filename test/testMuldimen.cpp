@@ -1,7 +1,9 @@
 #include<vector>
 #include<iostream>
 using namespace std;
-#include "../lznn_types.h"
+#include "../src/lznn_types.h"
+#include <cmath>
+
 class T
 {
     public:
@@ -78,10 +80,17 @@ class B: public A
             return a;
         }
 };
+double distance(double a, double b)
+{
+    return 1.0;
+}
 int main(void)
 {
     A *a = new B(1);
     a->print();
-
+    typedef double (*DistanceFunc)(double, double);
+    DistanceFunc func = distance;
+    cout << sqrt( pow(3, 2.0) ) << endl;
+    cout << func(1, 2) << endl;
     return 1;
 }
