@@ -25,7 +25,7 @@ class MLP
             size_t i = 1;
             while (i <= numberOfLayer)
             {
-                this->layers.push_back(PerceptronLayer(dataSize, sizeOfLayers[i - 1], sizeOfLayers[i]));
+                this->layers.push_back(new PerceptronLayer(dataSize, sizeOfLayers[i - 1], sizeOfLayers[i]));
                 i += 1;
             }
         }        
@@ -43,8 +43,15 @@ class MLP
             size_t i = 1;
             while (i <= numberOfLayer)
             {
-                this->layers.push_back(RegularizedPerceptronLayer(dataSize, sizeOfLayers[i - 1], sizeOfLayers[i], regularizationCoefficient));
+                this->layers.push_back(new RegularizedPerceptronLayer(dataSize, sizeOfLayers[i - 1], sizeOfLayers[i], regularizationCoefficient));
                 i += 1;
+            }
+        }
+        ~MLP()
+        {
+            for (auto& layer : layers)
+            {
+                delete layer;
             }
         }
         void ForwPropagate()
@@ -53,12 +60,12 @@ class MLP
             int i = 0;
             while (i < this->numberOfLayer)
             {
-                layers[i].SetInput(curInput);
-                layers[i].ForwPropagate();
-                curInput = layers[i].Output();
+                layers[i]->SetInput(curInput);
+                layers[i]->ForwPropagate();
+                curInput = layers[i]->Output();
                 i += 1;
             }
-            this->output = this->layers[numberOfLayer - 1].Output();
+            this->output = this->layers[numberOfLayer - 1]->Output();
         }
         
         void BackPropagate(double learningRate)
@@ -68,8 +75,8 @@ class MLP
             // Tools::dump(*(layers[numberOfLayer - 1].GetW()), "W_" + Tools::ToString(numberOfLayer - 1), "W");
             // Tools::dump(*(layers[numberOfLayer - 1].GetW0()), "W0_" + Tools::ToString(numberOfLayer - 1), "W0");
             //Debug////////////////
-            layers[numberOfLayer - 1].NextLinearWeightDelta = &(this->deltas);
-            layers[numberOfLayer - 1].BackPropagate(learningRate);
+            layers[numberOfLayer - 1]->NextLinearWeightDelta = &(this->deltas);
+            layers[numberOfLayer - 1]->BackPropagate(learningRate);
             //Debug////////////////
             // Tools::dump(*(layers[numberOfLayer - 1].NextLinearWeightDelta), "NextLinearWeightDelta_" + Tools::ToString(numberOfLayer - 1), "NextLinearWeightDelta");
             // Tools::dump(*(layers[numberOfLayer - 1].Input()), "input_" + Tools::ToString(numberOfLayer - 1), "input");
@@ -87,8 +94,8 @@ class MLP
                 // Tools::dump(*(layers[i].GetW()), "W_" + Tools::ToString(i), "W");
                 // Tools::dump(*(layers[i].GetW0()), "W0_" + Tools::ToString(i), "W0");
                 //Debug////////////////
-                layers[i].NextLinearWeightDelta = &(layers[i + 1].WeightDelta);
-                layers[i].BackPropagate(learningRate);
+                layers[i]->NextLinearWeightDelta = &(layers[i + 1]->WeightDelta);
+                layers[i]->BackPropagate(learningRate);
                 //Debug////////////////
                 // Tools::dump(*(layers[i].NextLinearWeightDelta), "NextLinearWeightDelta_" + Tools::ToString(i), "NextLinearWeightDelta");
                 // Tools::dump(*(layers[i].Input()), "input_" + Tools::ToString(i), "input");
@@ -106,7 +113,7 @@ class MLP
         {
             for(auto &layer: layers)
             {
-                layer.CleanGredient();
+                layer->CleanGredient();
             }
         }
         Matrix *Output()
@@ -123,7 +130,7 @@ class MLP
         // {
 
         // }
-        vector<PerceptronLayer> layers;
+        vector<PerceptronLayer*> layers;
     private:
         Matrix             *input;
         Matrix              deltas;
