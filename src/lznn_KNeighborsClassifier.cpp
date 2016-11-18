@@ -1,5 +1,6 @@
 #ifndef _KNEIGHBORSCLASSIFIER_CPP_
 #define _KNEIGHBORSCLASSIFIER_CPP_
+
 #include "lznn_types.h"
 #include "lznn_tools.cpp"
 
@@ -19,6 +20,8 @@ class KNeighborsClassifierComparison
             else return (lhs.second < rhs.second);
         }
 };
+
+typedef priority_queue< pair<int, double>, vector< pair<int, double> >, KNeighborsClassifierComparison > VotePriorityQueue; 
 
 class KNeighborsClassifier
 {
@@ -45,10 +48,18 @@ class KNeighborsClassifier
             }
         }
         
+    private:
+
+        size_t       nNeighbors;
+        size_t       nLabel;
+        Matrix       *trainInputs;
+        VectorInt    *trainLabels;
+        DistanceFunc distance;
+
         LabelType predictOne(Vector &input)
         {
             double curDistance = 0.0;
-            priority_queue< pair<int, double>, vector< pair<int, double> >, KNeighborsClassifierComparison > maxHeap;
+            VotePriorityQueue maxHeap;
             for (size_t j = 0; j < trainInputs->size(); j++)
             {
                 curDistance = distance(input, (*trainInputs)[j]);
@@ -62,6 +73,11 @@ class KNeighborsClassifier
                     maxHeap.push(pair<int, double>(j, curDistance));
                 }
             }
+            LabelType result = majority(maxHeap);
+            return result;
+        }
+        LabelType majority(VotePriorityQueue &maxHeap)
+        {
             vector<int> votes(nLabel, 0);
             LabelType result = 0;
             while(!maxHeap.empty())
@@ -75,13 +91,6 @@ class KNeighborsClassifier
             }
             return result;
         }
-    private:
-
-        size_t       nNeighbors;
-        size_t       nLabel;
-        Matrix       *trainInputs;
-        VectorInt    *trainLabels;
-        DistanceFunc distance;
 };
 
 
