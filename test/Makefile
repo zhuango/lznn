@@ -21,4 +21,4 @@ knnTest: test_KNeighborsClassifier.cpp ../src/lznn_KNeighborsClassifier.cpp
 
 .PHONY:clean
 clean:
-	rm test_tools testMul dumpMatrix.txt dumpVector.txt test_backPropagate test_forwPropagate
+	rm test_tools testMul dumpMatrix.txt dumpVector.txt test_backPropagate test_forwPropagate test_KNeighborsClassifier test_performance test_backPropagateRegularizedPerceptronLayer
