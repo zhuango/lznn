@@ -91,34 +91,52 @@ class PerceptronLayer
                 this->gredientW0[i] = 0.0;
             } 
         }
+
         Matrix *Output()
         {
             return &(this->output);
         }
+
         Matrix* Input()
         {
             return this->input;
         }
+
         Matrix* GetW()
         {
             return &(this->W);
         }
+
         Vector* GetW0()
         {
             return &(this->W0);
         }
+
         Matrix* GetGredientW()
         {
             return &(this->gredientW);
         }
+
         Vector* GetGredientW0()
         {
             return &(this->gredientW0);
         }
+
         void SetInput(Matrix *input)
         {
             this->input = input;
         }
+
+        void SetW(Matrix &W)
+        {
+            this->W = W;
+        }
+        
+        void SetW0(Vector &W0)
+        {
+            this->W0 = W0;
+        }
+
         Matrix deltas;
 
     protected:

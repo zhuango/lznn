@@ -19,24 +19,28 @@ int main(void)
     size_t dataSize = 5000;
 
     PerceptronLayer layer1(&inputs, dataSize, 400, 25);
+    Vector *W0 = layer1.GetW0();
+    Matrix *W  = layer1.GetW();
     for(size_t i = 0; i < 25; i++)
     {
-        layer1.W0[i] = W1[i][0];
+        (*W0)[i] = W1[i][0];
 
         for(size_t j = 1; j <= 400; j++)
         {
-            layer1.W[i][j - 1] = W1[i][j];
+            (*W)[i][j - 1] = W1[i][j];
         }
     }
     layer1.ForwPropagate();
 
     PerceptronLayer layer2(layer1.Output(), dataSize, 25, 10);
+    W0 = layer2.GetW0();
+    W  = layer2.GetW();
     for(size_t i = 0; i < 10; i++)
     {
-        layer2.W0[i] = W2[i][0];
+        (*W0)[i] = W2[i][0];
         for(size_t j = 1; j <= 25; j++)
         {
-            layer2.W[i][j - 1] = W2[i][j];
+            (*W)[i][j - 1] = W2[i][j];
         }
     }
     layer2.ForwPropagate();
@@ -58,6 +62,7 @@ int main(void)
             currectCounter += 1;
         }
     }
+    cout << "should be : 0.9752" << endl;
     cout << double(currectCounter / 5000.0) << endl;
     
     return 0;

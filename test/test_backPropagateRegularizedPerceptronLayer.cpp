@@ -7,19 +7,6 @@
 using namespace std;
 #include "common.h"
 
-void fillData(string labelFile, vector<int> &labels)
-{
-    int a = 0;
-    ifstream labelF;
-    labelF.open(labelFile.c_str());
-    unsigned int counter = 0;
-    while(!labelF.eof())
-    {
-        labelF >> a;
-        labels.push_back(a - 1);
-    }
-}
-
 int main(void)
 {
     Matrix inputs; 
