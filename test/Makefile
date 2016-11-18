@@ -16,6 +16,9 @@ bpRtest: test_backPropagateRegularizedPerceptronLayer.cpp ../src/lznn_Perceptron
 test_performance: test_performance.cpp ../src/lznn_PerceptronLayer.cpp ../src/lznn_MLP.cpp ../src/lznn_types.h 
 	g++ test_performance.cpp -o test_performance -std=c++11 -g
 
+knnTest: test_KNeighborsClassifier.cpp ../src/lznn_KNeighborsClassifier.cpp
+	g++ test_KNeighborsClassifier.cpp -o test_KNeighborsClassifier -std=c++11 -g
+
 .PHONY:clean
 clean:
 	rm test_tools testMul dumpMatrix.txt dumpVector.txt test_backPropagate test_forwPropagate

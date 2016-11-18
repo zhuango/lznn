@@ -2,6 +2,7 @@
 #define _TOOLS_CPP_
 
 #include "lznn_types.h"
+#include <cmath>
 #include <string>
 #include <fstream>
 #include <iostream>
@@ -50,6 +51,19 @@ class Tools
             ostringstream ss;
             ss << a;
             return ss.str();
+        }
+
+        static double EuclideanDistance(Vector &a, Vector &b)
+        {
+            if (a.size() != b.size()) {throw;}
+
+            double result = 0;
+            for (int i = 0; i < a.size(); i++)
+            {
+                result += pow((a[i] - b[i]), 2.0);
+            }
+            result = sqrt(result);
+            return result;
         }
 };
 

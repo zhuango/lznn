@@ -8,4 +8,7 @@ typedef vector< vector<int> > MatrixInt;
 typedef vector<double> Vector;
 typedef vector<int> VectorInt;
 
+typedef double (*DistanceFunc)(Vector&, Vector&);
+typedef int LabelType;
+
 #endif
